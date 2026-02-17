@@ -1,3 +1,14 @@
+#' Get example dataset (AOI + NDVI time series)
+#'
+#' Loads the synthetic example data shipped with the package.
+#'
+#' @return A list with:
+#' \describe{
+#'   \item{aoi}{An sf polygon object}
+#'   \item{files}{Character vector with NDVI raster file paths}
+#'   \item{dates}{Date vector corresponding to the rasters}
+#' }
+#' @export
 get_example_data <- function() {
 
   # Paths
