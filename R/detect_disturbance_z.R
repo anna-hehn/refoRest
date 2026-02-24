@@ -6,6 +6,8 @@
 #' @param direction "drop" (default) or "rise"
 #' @param min_duration integer, how many consecutive layers must meet the threshold
 #' @param robust logical, if TRUE uses median/MAD instead of mean/sd (more robust to outliers)
+#' @param min_spread numeric >= 0. Optional lower bound for baseline spread (MAD/SD).
+#'   Use >0 to avoid extremely large absolute z-scores when baseline variability is tiny.
 #'
 #' @return list(disturbance, first_idx, severity, summary)
 #' @export
@@ -14,7 +16,8 @@ detect_disturbance_z <- function(x,
                                  z_thresh     = -2,
                                  direction    = c("drop", "rise"),
                                  min_duration = 1,
-                                 robust       = TRUE) {
+                                 robust       = TRUE,
+                                 min_spread   = 0) {
 
   ## --- Argument checks ------------------------------------------------------
 
@@ -24,9 +27,9 @@ detect_disturbance_z <- function(x,
     stop("x must be a terra SpatRaster.")
   }
 
-  ## nur numerische Layer zulassen
-  if (!terra::is.numeric(x)) {
-    stop("x must be a numeric SpatRaster (no factor/character layers).")
+  # numeric check: terra stores raster value type per layer; factors are categorical
+  if (any(terra::is.factor(x))) {
+    stop("x must be numeric (no categorical/factor layers).")
   }
 
   if (terra::nlyr(x) < 2) {
@@ -54,6 +57,12 @@ detect_disturbance_z <- function(x,
     stop("robust must be TRUE/FALSE (single value).")
   }
 
+  # <-- DAS ist dein fehlender Schritt B)
+  if (!is.numeric(min_spread) || length(min_spread) != 1L ||
+      is.na(min_spread) || min_spread < 0) {
+    stop("min_spread must be a single non-NA numeric value >= 0.")
+  }
+
   min_duration <- as.integer(min_duration)
 
   ## --- Baseline-Statistik pro Pixel ----------------------------------------
@@ -71,6 +80,11 @@ detect_disturbance_z <- function(x,
 
   ## Spread == 0 -> NA setzen, damit nicht durch 0 geteilt wird
   spread <- terra::ifel(spread == 0, NA, spread)
+
+  # optional floor to avoid extremely large z-scores when baseline variability is tiny
+  if (min_spread > 0) {
+    spread <- terra::ifel(spread < min_spread, min_spread, spread)
+  }
 
   ## --- Z-Scores -------------------------------------------------------------
 
@@ -178,19 +192,3 @@ detect_disturbance_z <- function(x,
     )
   )
 }
-
-
-# Z-Werte explizit anschauen
-ex <- get_example_data()
-x  <- get_index_local(ex$aoi, ex$files, ex$dates)
-
-# Baseline Stats wie in der Funktion
-x_base <- x[[1:5]]
-center <- app(x_base, median, na.rm=TRUE)
-spread <- app(x_base, function(v) mad(v, constant=1, na.rm=TRUE))
-spread <- ifel(spread == 0, NA, spread)
-
-z <- (x - center) / spread
-
-# Maximaler negativer Z-Wert im gesamten Raster
-global(min(z[[6:10]], na.rm=TRUE), "min")
