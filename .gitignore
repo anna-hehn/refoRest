@@ -1,7 +1,30 @@
-.Rproj.user
+# R session files
 .Rhistory
 .RData
 .Ruserdata
-.httr-oauth
+
+# RStudio files
+.Rproj.user/
+
+# OS files
 .DS_Store
-.quarto
+Thumbs.db
+
+# Quarto / knitr / temp
+.quarto/
+*_cache/
+*_files/
+
+# Package build
+*.tar.gz
+*.Rcheck/
+
+# Logs
+*.log
+
+# Generated output folders
+test_report_output/
+final_package_test_output/
+
+# Local backup folders
+inst/extdata_backup/
