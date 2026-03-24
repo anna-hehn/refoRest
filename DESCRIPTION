@@ -1,19 +1,24 @@
 Package: refoRest
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Detection and Mapping of Disturbance in Forest Time Series
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Anna", "Hehn",
+      email = "anna.hehn@stud-mail.uni-wuerzburg.de",
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Description: This package provides tools to detect, analyze and visualize disturbances in remote sensing index time series.
+It implements z-score based disturbance detection, spatial patch delineation and automated map and report generation for disturbance events.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports:
+  terra,
+  sf,
+  ggplot2,
+  scales
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
