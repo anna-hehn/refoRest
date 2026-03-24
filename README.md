@@ -130,7 +130,7 @@ This function reads a time series of raster files and clips them to a given AOI.
 ### Output
 - A `terra::SpatRaster`with one layer per date
 
-### `detect_disturbance_(z)
+### `detect_disturbance_(z)`
 ```
 dz <- detect_disturbance_z(
   x = x,
