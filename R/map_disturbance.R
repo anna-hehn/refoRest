@@ -41,7 +41,7 @@ map_disturbance <- function(
     title = NULL,
     subtitle = NULL,
     caption = NULL,
-    presence_color = "#d73027",
+    presence_color = "firebrick4",
     na_color = "white",
     severity_palette = c("firebrick4", "khaki", "forestgreen"),
     severity_limits = NULL,
@@ -117,12 +117,15 @@ map_disturbance <- function(
   value_name <- NULL
 
   if (!is.null(severity)) {
+    # show severity only where patches exist
     plot_r <- terra::mask(severity, pid)
     value_name <- "severity"
   } else if (show == "presence") {
-    plot_r <- terra::ifel(!is.na(pid), 1L, NA)
+    # 1 = disturbed, 0 = undisturbed
+    plot_r <- terra::ifel(!is.na(pid), 1L, 0L)
     value_name <- "presence"
   } else {
+    # show patch IDs directly
     plot_r <- pid
     value_name <- "patch_id"
   }
@@ -158,14 +161,23 @@ map_disturbance <- function(
 
   if (value_name == "presence") {
 
+    df$presence_label <- ifelse(
+      is.na(df$presence) | df$presence == 0,
+      "No Disturbance",
+      "Disturbed area"
+    )
+
     p <- p +
       ggplot2::geom_raster(
-        ggplot2::aes(fill = factor(presence)),
+        ggplot2::aes(fill = presence_label),
         alpha = raster_alpha
       ) +
       ggplot2::scale_fill_manual(
-        values = c("1" = presence_color),
-        na.value = na_color,
+        values = c(
+          "No Disturbance" = na_color,
+          "Disturbed area" = presence_color
+        ),
+        breaks = c("Disturbed area", "No Disturbance"),
         name = "Disturbance"
       )
 
@@ -234,3 +246,7 @@ map_disturbance <- function(
 
   p
 }
+
+#' @export
+devtools::document()
+devtools::load_all()
