@@ -135,6 +135,14 @@ map_disturbance <- function(
   df <- terra::as.data.frame(plot_r, xy = TRUE, na.rm = FALSE)
   names(df)[3] <- value_name
 
+  if (value_name == "presence") {
+    df$presence_label <- ifelse(
+      is.na(df$presence) | df$presence == 0,
+      "No Disturbance",
+      "Disturbed area"
+    )
+  }
+
   ## --- Base plot ------------------------------------------------------------
 
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y)) +
@@ -246,7 +254,3 @@ map_disturbance <- function(
 
   p
 }
-
-#' @export
-devtools::document()
-devtools::load_all()
