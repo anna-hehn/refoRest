@@ -292,10 +292,15 @@ larger patches the identification of dominant disturbance processess at the land
 | `top_n`     | Number of largest patches to display                                        |
 | `show`      | Controls whether presence or patch IDs are visualized                       |
 
-### Map Types based on Example Data
+### Example Map
 
-????
+The example below illustrates the output of `map_disturbance()` when visualizing disturbance severity.  
+By providing the `severity` raster, the function generates a map in which disturbance intensity is represented using z-scores.
 
+![Disturbance severity map](man/figures/disturbance_severity.png)
+
+The resulting map highlights where disturbances are strongest within the study area.  
+It demonstrates how `map_disturbance()` translates analytical outputs into spatially explicit visualizations, enabling an intuitive interpretation of disturbance intensity patterns.
 
 ### `create_map_and_report`
 
