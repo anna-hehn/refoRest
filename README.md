@@ -75,16 +75,18 @@ x <- get_index_local(
 
 # Run the full workflow
 # This creates  a disturbance detection result, patch metrics, four disturbance maps, 
-a CSV table with patch statistics and a text report
+# a CSV table with patch statistics and a text report
 res <- create_map_and_report(
   x = x,
   aoi = ex$aoi,
   baseline = 1:5,
-  z_thresh = -2,
+  z_thresh = -3,
   direction = "drop",
-  min_duration = 1,
+  min_duration = 2,
   robust = TRUE,
   min_spread = 0,
+  min_patch_cells = 5,
+  top_n = 3,
   output_dir = "disturbance_output"
 )
 ```
@@ -144,7 +146,7 @@ cropping and masking the data to the AOI and assigning layer names based on the 
 ### Output
 - A `terra::SpatRaster`with one layer per date
 
-### `detect_disturbance_(z)`
+### `detect_disturbance_z()`
 ```r
 dz <- detect_disturbance_z(
   x = x,
@@ -155,8 +157,28 @@ dz <- detect_disturbance_z(
   robust = TRUE,
   min_spread = 0
 )
+
+# > dz$summary
+# $method
+# [1] "median/MAD z-score"
+# $direction
+# [1] "drop"
+# $z_thresh
+# [1] -2
+# $baseline
+# [1] 1 2 3 4 5
+# $post_idx
+# [1]  6  7  8  9 10
+# $post_names
+# [1] "2023-01-06" "2023-01-07" "2023-01-08" "2023-01-09" "2023-01-10"
+# $disturbed_pixels
+# [1] 3863
+# $total_pixels
+# [1] 6400
+# $disturbed_percent
+# [1] 60.35938
 ```
-This function detects disturbance from a raster time series using z-scores relative to a baseline period, which describes the core step of the workflow.
+This function detects disturbances from a raster time series using z-scores relative to a baseline period, which describes the core step of the workflow.
 
 **Interpretation**
 Disturbance is defined as a statistically significant deviation from a baseline period.
@@ -186,6 +208,9 @@ The chosen threshold directly controls the sensitivity of the detection.
 - `severity`: most extreme z-score in the post-baseline period
 - `summary`: method and result overview
 
+  Using the provided example dataset, the disturbance detection identified that approximately 60% of the pixels were classified as disturbed.  
+  This indicates a spatially extensive disturbance event affecting a large proportion of the study area.
+
 ### `patch_metrics()`
 ```r
 pm <- patch_metrics(
@@ -196,6 +221,15 @@ pm <- patch_metrics(
   min_patch_cells = 1,
   return_polygons = TRUE
 )
+
+# > head(pm$patch_table)
+#   patch_id n_cells    area_m2     area_ha severity_mean severity_min severity_max first_idx_min perimeter_m shape_index
+# 1        1    3843 7390849800 739084.9800     -7.413320  -314.980871    -2.002078             1 8473140.904   27.803042
+# 2       13      10   19230221   1923.0221     -4.465262    -7.649750    -2.016222             1   30517.346    1.963133
+# 3       46       6   11539755   1153.9755     -4.320562    -6.792175    -2.556390             1   19443.650    1.614636
+# 4       18       2    3846110    384.6110    -18.314864   -33.629177    -3.000550             1   11094.001    1.595778
+# 5       24       1    1923119    192.3119     -3.087750    -3.087750    -3.087750             1    5547.092    1.128385
+# 6        9       1    1923011    192.3011    -27.694537   -27.694537   -27.694537             3    5546.937    1.128385
 ```
 This function groups disturbed pixels into spatial patches and computes patch-level metrics.
 The processing pipeline of this function converts the disturbance raster into a binary mask, identifies spatially connected
@@ -218,10 +252,8 @@ disturbances, which are relevant for ecological interpretation and management de
 ### Outputs
 
 - `patch_id`: SpatRaster with unique patch IDs
-- `patch_table`: Data frame wih one row per patch and associated metrics
+- `patch_table`: Data frame with one row per patch and associated metrics
 - `patch_polygons`: Optional polygon representation of patches
-- `patch_table`: data frame with patch metrics
-- `patch_polygons`: optional polygon representation
 
 ### Typical metrics
 
@@ -272,11 +304,13 @@ res <- create_map_and_report(
   x = x,
   aoi = ex$aoi,
   baseline = 1:5,
-  z_thresh = -2,
+  z_thresh = -3,
   direction = "drop",
-  min_duration = 1,
+  min_duration = 2,
   robust = TRUE,
   min_spread = 0,
+  min_patch_cells = 5,
+  top_n = 3,
   output_dir = "disturbance_output"
 )
 ```
