@@ -1,55 +1,45 @@
----
-output: github_document
----
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
-
 # refoRest
 
-<!-- badges: start -->
-<!-- badges: end -->
+refoRest provides tools to detect, analyze and map disturbance patterns in remote sensing index time series.
+The package implements a reproducible workflow for disturbance detection using z-scores, spatial patch delination and automated generation of maps and summary outputs.
 
-The goal of refoRest is to ...
+---
+
+## Key Features
+
+Designed for raster time series data (e.g. NDVI or NBR), the package provides functions to:
+
+- Detect disturbance events using z-score based methods 
+- Apply robust statistics (median / MAD) to reduce sensitivity to outliers
+- Identify spatially connected disturbance patches
+- Compute patch-level metrics (area, severity, timing)
+- Generate disturbance maps using `ggplot2`
+- Produce automated outputs including maps, tables and reports
+
+---
+
+## Usage
+
+Users can detect and analyze disturbance dynamics in forest time series, making it ideal for applications in sustainable forest management and forest monitoring.
+
+---
+
+## Reqirements
+
+This package requires the following R packages:
+
+- `sf`
+- `terra`
+- `ggplot2`
+- `scales`
+- `utils`
+
+---
+
+## Limitations
+?
+
+---
 
 ## Installation
-
-You can install the development version of refoRest from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("pak")
-pak::pak("anna-hehn/refoRest")
-```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-library(refoRest)
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+From GitHub

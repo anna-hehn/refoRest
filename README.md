@@ -1,53 +1,165 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # refoRest
 
-<!-- badges: start -->
+refoRest provides tools to detect, analyze and map disturbance patterns in remote sensing index time series.
+The package implements a reproducible workflow for disturbance detection using z-scores, spatial patch delination and automated generation of maps and summary outputs.
 
-<!-- badges: end -->
+---
 
-The goal of refoRest is to …
+## Key Features
+
+Designed for raster time series data (e.g. NDVI), the package provides functions to:
+
+- Detect disturbance events using z-score based methods 
+- Apply robust statistics (median / MAD) to reduce sensitivity to outliers
+- Identify spatially connected disturbance patches
+- Compute patch-level metrics (area, severity, timing)
+- Generate disturbance maps using `ggplot2`
+- Produce automated outputs including maps, tables and reports
+
+
+## Usage
+
+Users can detect and analyze disturbance dynamics in forest time series, making it ideal for applications in sustainable forest management and forest monitoring.
+
+
+## Requirements
+
+This package requires the following R packages:
+
+- `sf`
+- `terra`
+- `ggplot2`
+- `scales`
+- `utils`
+
+
+## Limitations
+?
+
+---
 
 ## Installation
+From GitHub
 
-You can install the development version of refoRest from
-[GitHub](https://github.com/) with:
+```
+# List of required packages
+packages < - c("sf", "terra", "ggplot2", "scales", "utils")
 
-``` r
-# install.packages("pak")
-pak::pak("anna-hehn/refoRest")
+# Check which packages are missing
+missing_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+
+# Install only missing packages
+if (length(missing_packages) > 0) {
+  install.packages(missing_packages)
+} else {
+  message("All packages are already installed!")
+}
+
+remotes::install_github("anna-hehn/refoRest")
 ```
 
-## Example
+## EXAMPLE: Detecting Forest Disturbances within a time series
 
-This is a basic example which shows you how to solve a common problem:
-
-``` r
+```
 library(refoRest)
-## basic example code
+
+# Load example data
+ex <- get_example_data()
+
+# Read and clip the local NDVI time series
+x <- get_index_local(
+  aoi   = ex$aoi,
+  files = ex$files,
+  dates = ex$dates
+)
+
+# Run the full workflow
+# This creates  a disturbance detection result, patch metrics, four disturbance maps, 
+a CSV table with patch statistics and a text report
+res <- create_map_and_report(
+  x = x,
+  aoi = ex$aoi,
+  baseline = 1:5,
+  z_thresh = -2,
+  direction = "drop",
+  min_duration = 1,
+  robust = TRUE,
+  min_spread = 0,
+  output_dir = "disturbance_output"
+)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+---
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+## Detailed Explanation
+
+### `get_example_data()`
 ```
+library(refoRest)
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+# Load example dataset
+ex <- get_example_data()
 
-You can also embed plots, for example:
+# Inspect structure
+str(ex)
+```
+This function loads the synthetic example dataset included in the package.
+### Output
+- `aoi`: an `sf`polygon defining the Area of Interest
+- `files`: charcter vector of NDVI raster file paths
+- `dates`: `Date`vector corresponding to the raster layers
 
-<img src="man/figures/README-pressure-1.png" alt="" width="100%" />
+### `get_index_local()`
+```
+x <- get_index_local(
+  aoi   = ex$aoi,
+  files = ex$files,
+  dates = ex$dates
+)
+```
+This function reads a time series of raster files and clips them to a given AOI.
+### Arguments
+- `aoi`: `sf`polygon (Area of Interest)
+- `files`: charcter vector of raster file paths
+- `dates`: `Date`vector matching the raster files
+### Processing steps
+- Reads raster files into a multi-layer `SpatRaster`
+- Converts the AOI to a `terra`vector
+- Crops and masks the raster to the AOI
+- Assigns layer names based on the provided dates
+### Output
+- A `terra::SpatRaster`with one layer per date
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+### `detect_disturbance_(z)`
+```
+dz <- detect_disturbance_z(
+  x = x,
+  baseline = 1:5,
+  z_thresh = -2,
+  direction = "drop",
+  min_duration = 1,
+  robust = TRUE,
+  min_spread = 0
+)
+```
+This function detects disturbance from a raster time series using z-scores relative to a baseline period, which describes the core step of the workflow.
+
+### Key Concepts
+- Baseline statistics are computed per pixel
+- Disturbance is defined as deviation from baseline
+- Supports both decreases ("drop") and increases
+
+### Arguments
+- `x`: raster time series (`SpatRaster`)
+- `baseline`: indiced defining the reference period
+- `z_thresh`: z-score threshold
+- `direction`: `"drop"`or `"rise"`
+- `min_duration`: minimum number of consecutive disturbed observations
+- `robust`: use median/MAD instead of mean/sd
+- `min_spread`: lower bound for variability
+
+### Outputs
+- `disturbance`: binary disturbance mask
+- `first_idx`: first detection index per pixel
+- `severity`: most extreme z-score in the post-baseline period
+- `summary`: method and result overview
