@@ -1,0 +1,29 @@
+Disturbance Analysis Report
+===========================
+
+Created: 2026-03-25 16:40:06.138477
+
+Detection settings
+------------------
+Method: median/MAD z-score
+Direction: drop
+Z-threshold: -3
+Baseline layers: 1, 2, 3, 4, 5
+Post-baseline layers: 6, 7, 8, 9, 10
+Post-baseline names: 2023-01-06, 2023-01-07, 2023-01-08, 2023-01-09, 2023-01-10
+Minimum duration: 2
+Minimum spread: 0
+
+Patch settings
+--------------
+Directions: 8
+Minimum patch cells: 5
+
+Results summary
+---------------
+Total cells: 6400
+Disturbed cells: 1171
+Disturbed percent: 18.3
+Number of patches: 41
+Largest patch (ha): 42310.5327
+
