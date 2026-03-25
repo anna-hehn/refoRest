@@ -264,7 +264,7 @@ create_map_and_report <- function(
   )
 
   if (save_maps) {
-    files_out$presence_map <- file.path(output_dir, "disturbance_presence.png")
+    files_out$presence_map <- file.path(output_dir, "detected_disturbance.png")
     files_out$patch_map    <- file.path(output_dir, "disturbance_patches.png")
     files_out$severity_map <- file.path(output_dir, "disturbance_severity.png")
     files_out$top_map      <- file.path(output_dir, "disturbance_top_patches.png")
