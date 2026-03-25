@@ -158,6 +158,10 @@ map_disturbance <- function(
       panel.grid = ggplot2::element_blank(),
       plot.title = ggplot2::element_text(face = "bold"),
       legend.title = ggplot2::element_text(face = "bold"),
+
+      panel.background = ggplot2::element_rect(fill = "white", color = NA),
+      plot.background  = ggplot2::element_rect(fill = "white", color = NA),
+
       panel.border = ggplot2::element_rect(
         fill = NA,
         color = panel_border_color,
