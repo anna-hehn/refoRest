@@ -11,11 +11,11 @@
 #' @export
 get_example_data <- function() {
 
-  # Paths
+# Paths
   aoi_path <- system.file("extdata", "aoi.gpkg", package = "refoRest")
   ext_dir  <- system.file("extdata", package = "refoRest")
 
-  # NDVI files
+# NDVI files
   files <- list.files(
     ext_dir,
     pattern = "^ndvi_\\d+\\.tif$",
@@ -23,10 +23,10 @@ get_example_data <- function() {
   )
   files <- files[order(files)]
 
-  # Dates (synthetic daily sequence starting 2023-01-01)
+# Dates (synthetic daily sequence starting 2023-01-01)
   dates <- as.Date("2023-01-01") + (seq_along(files) - 1)
 
-  # Return
+# Return
   list(
     aoi   = sf::st_read(aoi_path, quiet = TRUE),
     files = files,
