@@ -107,7 +107,7 @@ create_map_and_report <- function(
     dpi = 300
 ) {
 
-  ## --- Argument checks ------------------------------------------------------
+##Argument checks
 
   direction <- match.arg(direction)
   severity_oob <- match.arg(severity_oob)
@@ -140,13 +140,13 @@ create_map_and_report <- function(
     stop("save_report must be TRUE/FALSE.")
   }
 
-  ## --- Create output directory ---------------------------------------------
+##Create output directory
 
   if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
   }
 
-  ## --- 1) Detect disturbance -----------------------------------------------
+##Detect disturbance
 
   dz <- detect_disturbance_z(
     x = x,
@@ -158,7 +158,7 @@ create_map_and_report <- function(
     min_spread = min_spread
   )
 
-  ## --- 2) Compute patches --------------------------------------------------
+##Compute patches
 
   pm <- patch_metrics(
     disturbance = dz$disturbance,
@@ -171,7 +171,7 @@ create_map_and_report <- function(
     stats_first_idx = stats_first_idx
   )
 
-  ## --- 3) Create maps ------------------------------------------------------
+##Create maps
 
   p_presence <- map_disturbance(
     patch_id = pm$patch_id,
@@ -252,7 +252,7 @@ create_map_and_report <- function(
     top_patches = p_top
   )
 
-  ## --- 4) Save outputs -----------------------------------------------------
+##Save Outputs
 
   files_out <- list(
     presence_map = NULL,
@@ -327,7 +327,7 @@ create_map_and_report <- function(
     )
   }
 
-  ## --- Return --------------------------------------------------------------
+##Return
 
   list(
     detection = dz,

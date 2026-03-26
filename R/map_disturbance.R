@@ -58,7 +58,7 @@ map_disturbance <- function(
     dpi = 300
 ) {
 
-  ## --- Argument checks ------------------------------------------------------
+##Argument checks
 
   show <- match.arg(show)
   severity_oob <- match.arg(severity_oob)
@@ -82,7 +82,7 @@ map_disturbance <- function(
     }
   }
 
-  ## --- AOI handling ---------------------------------------------------------
+##AOI handling
 
   aoi_sf <- NULL
   if (!is.null(aoi)) {
@@ -91,7 +91,7 @@ map_disturbance <- function(
     if (is.null(aoi_sf)) stop("aoi must be sf or SpatVector.")
   }
 
-  ## --- Keep only top N patches if requested --------------------------------
+##Keep only top N patches if requested
 
   pid <- patch_id
 
@@ -111,7 +111,7 @@ map_disturbance <- function(
     pid <- terra::classify(pid, rcl = rcl, others = NA)
   }
 
-  ## --- Decide what to plot --------------------------------------------------
+##Decide what to plot
 
   plot_r <- NULL
   value_name <- NULL
@@ -130,7 +130,7 @@ map_disturbance <- function(
     value_name <- "patch_id"
   }
 
-  ## --- Raster to data.frame for ggplot -------------------------------------
+##Raster to data.frame for ggplot
 
   df <- terra::as.data.frame(plot_r, xy = TRUE, na.rm = FALSE)
   names(df)[3] <- value_name
@@ -143,7 +143,7 @@ map_disturbance <- function(
     )
   }
 
-  ## --- Base plot ------------------------------------------------------------
+##Base plot
 
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y)) +
     ggplot2::labs(
@@ -169,7 +169,7 @@ map_disturbance <- function(
       )
     )
 
-  ## --- Add raster layer -----------------------------------------------------
+##Add raster layer
 
   if (value_name == "presence") {
 
@@ -228,7 +228,7 @@ map_disturbance <- function(
       )
   }
 
-  ## --- Add AOI outline ------------------------------------------------------
+##Add AOI outline
 
   if (!is.null(aoi_sf)) {
     p <- p +
@@ -244,7 +244,7 @@ map_disturbance <- function(
     p <- p + ggplot2::coord_equal()
   }
 
-  ## --- Save -----------------------------------------------------------------
+##Save
 
   if (!is.null(save_path)) {
     ggplot2::ggsave(

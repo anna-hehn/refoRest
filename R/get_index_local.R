@@ -13,17 +13,17 @@ get_index_local <- function(aoi, files, dates) {
   if(length(files)!= length(dates)) stop("files and dates must have same length.")
   if(any(!file.exists(files))) stop("Some file do not exist.")
 
-  #read rasters (multi-layer SpatRaster)
+#Read Rasters (multi-layer SpatRaster)
   x <- terra::rast(files)
 
-  #convert AOI to terra vector
+#Convert AOI to terra vector
   aoi_v <- terra::vect(aoi)
 
-  #clip (crop = faster, mask = exact)
+#Clip (crop = faster, mask = exact)
   x <- terra::crop(x, aoi_v)
   x <- terra::mask(x, aoi_v)
 
-  #layer names = dates
+#Layer names = dates
   names(x) <- as.character(dates)
 
   x

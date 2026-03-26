@@ -19,7 +19,7 @@ detect_disturbance_z <- function(x,
                                  robust       = TRUE,
                                  min_spread   = 0) {
 
-  ## --- Argument checks ------------------------------------------------------
+##Argument checks
 
   direction <- match.arg(direction)
 
@@ -27,7 +27,7 @@ detect_disturbance_z <- function(x,
     stop("x must be a terra SpatRaster.")
   }
 
-  # numeric check: terra stores raster value type per layer; factors are categorical
+  # numeric check: terra stores raster value type per layer, factors are categorical
   if (any(terra::is.factor(x))) {
     stop("x must be numeric (no categorical/factor layers).")
   }
@@ -57,7 +57,6 @@ detect_disturbance_z <- function(x,
     stop("robust must be TRUE/FALSE (single value).")
   }
 
-  # <-- DAS ist dein fehlender Schritt B)
   if (!is.numeric(min_spread) || length(min_spread) != 1L ||
       is.na(min_spread) || min_spread < 0) {
     stop("min_spread must be a single non-NA numeric value >= 0.")
@@ -65,7 +64,7 @@ detect_disturbance_z <- function(x,
 
   min_duration <- as.integer(min_duration)
 
-  ## --- Baseline-Statistik pro Pixel ----------------------------------------
+##Baseline-Statistic per Pixel
 
   x_base <- x[[baseline]]
 
@@ -78,7 +77,7 @@ detect_disturbance_z <- function(x,
     spread <- terra::app(x_base, fun = function(v) stats::sd(v, na.rm = TRUE))
   }
 
-  ## Spread == 0 -> NA setzen, damit nicht durch 0 geteilt wird
+## Spread == 0 -> NA setzen, damit nicht durch 0 geteilt wird
   spread <- terra::ifel(spread == 0, NA, spread)
 
   # optional floor to avoid extremely large z-scores when baseline variability is tiny
@@ -86,18 +85,18 @@ detect_disturbance_z <- function(x,
     spread <- terra::ifel(spread < min_spread, min_spread, spread)
   }
 
-  ## --- Z-Scores -------------------------------------------------------------
+##Z-Scores
 
   z <- (x - center) / spread
 
-  ## nur Layer nach der Baseline bewerten
+##Select and evaluate only post-baseline Layers (exclude baseline period)
   post_idx <- setdiff(seq_len(terra::nlyr(x)), baseline)
   if (length(post_idx) == 0L) {
     stop("No post-baseline layers to evaluate (baseline covers all layers).")
   }
   z_post <- z[[post_idx]]
 
-  ## --- Schwellenbedingung (0/1-Raster) -------------------------------------
+##Threshold condition (binary raster: 0/1)
 
   if (direction == "drop") {
     cond <- terra::ifel(z_post < z_thresh, 1L, 0L)
@@ -106,7 +105,7 @@ detect_disturbance_z <- function(x,
   }
   names(cond) <- names(z_post)
 
-  ## --- Störung (mind. min_duration hintereinander) -------------------------
+##Disturbance detection (at least min_duration consecutive events)
 
   if (min_duration == 1L) {
     disturbed <- terra::app(
@@ -130,7 +129,7 @@ detect_disturbance_z <- function(x,
   disturbed <- terra::ifel(disturbed == 1L, 1L, NA)
   names(disturbed) <- "disturbance"
 
-  ## --- Erstes Auftreten -----------------------------------------------------
+##First occurrence of Disturbance
 
   first_idx <- terra::app(
     cond,
@@ -144,7 +143,7 @@ detect_disturbance_z <- function(x,
   first_idx <- terra::mask(first_idx, disturbed)
   names(first_idx) <- "first_idx"
 
-  ## --- Stärke (extremster Z-Wert im Post-Zeitraum) -------------------------
+##Disturbance Severity (most extreme z-value during post-baseline period)
 
   if (direction == "drop") {
     severity <- terra::app(
@@ -166,7 +165,7 @@ detect_disturbance_z <- function(x,
   severity <- terra::mask(severity, disturbed)
   names(severity) <- "severity_z"
 
-  ## --- Zusammenfassung ------------------------------------------------------
+##Summary Statistics
 
   n_pix_total <- terra::ncell(disturbed)
   n_pix_dist  <- as.integer(terra::global(!is.na(disturbed), "sum", na.rm = TRUE)[1, 1])

@@ -33,7 +33,7 @@ patch_metrics <- function(disturbance,
                           stats_severity = c("mean", "min", "max"),
                           stats_first_idx = c("min")) {
 
-  ## --- Argument checks ------------------------------------------------------
+##Argument checks
 
   if (!inherits(disturbance, "SpatRaster")) {
     stop("disturbance must be a terra SpatRaster.")
@@ -69,12 +69,12 @@ patch_metrics <- function(disturbance,
     }
   }
 
-  ## --- Ensure binary mask (patch pixels are 1, everything else NA) ----------
+##Ensure binary mask (patch pixels are 1, everything else NA)
 
-  # Accept either 1/NA or 1/0 etc. We standardize to 1/NA for clumping.
+  # Accepts either 1/NA or 1/0 formats, standardized to 1/NA for clumping.
   mask <- terra::ifel(!is.na(disturbance) & disturbance != 0, 1L, NA)
 
-  ## --- Label connected components (patch IDs) -------------------------------
+##Label connected components (patch IDs)
 
   # patch IDs start at 1...n; NA outside patches
   patch_id <- terra::patches(mask, directions = directions)
@@ -89,7 +89,7 @@ patch_metrics <- function(disturbance,
     ))
   }
 
-  ## --- Patch size filter (min_patch_cells) ---------------------------------
+##Patch size filter (min_patch_cells)
 
   # Count cells per patch
   f <- terra::freq(patch_id)
@@ -110,7 +110,7 @@ patch_metrics <- function(disturbance,
   f <- terra::freq(patch_id)
   f <- f[!is.na(f$value), , drop = FALSE]
 
-  ## --- Core metrics: area ---------------------------------------------------
+##Core metrics: area
 
   # area per cell in map units (m^2 if projected in meters)
   cell_area <- terra::cellSize(patch_id, unit = "m")
@@ -122,12 +122,12 @@ patch_metrics <- function(disturbance,
   # also store cell count
   count_df <- data.frame(patch_id = f$value, n_cells = f$count)
 
-  ## --- Optional: severity stats per patch ----------------------------------
+##Optional: severity stats per patch
 
   sev_df <- NULL
   if (!is.null(severity)) {
     # aggregate severity per patch (mean/min/max by default)
-    # terra::zonal supports a single fun; so we compute multiple and merge.
+    # as terra::zonal accepts only one aggregation function, multiple statistics are computed individually and then merged
     tmp_list <- lapply(stats_severity, function(fn) {
       z <- terra::zonal(severity, patch_id, fun = fn, na.rm = TRUE)
       colnames(z) <- c("patch_id", paste0("severity_", fn))
@@ -136,7 +136,7 @@ patch_metrics <- function(disturbance,
     sev_df <- Reduce(function(a, b) merge(a, b, by = "patch_id", all = TRUE), tmp_list)
   }
 
-  ## --- Optional: first_idx stats per patch ---------------------------------
+##Optional: first_idx stats per patch
 
   first_df <- NULL
   if (!is.null(first_idx)) {
@@ -148,8 +148,7 @@ patch_metrics <- function(disturbance,
     first_df <- Reduce(function(a, b) merge(a, b, by = "patch_id", all = TRUE), tmp_list)
   }
 
-  ## --- Optional: polygons + perimeter/shape --------------------------------
-  # Note: perimeter is most meaningful in a projected CRS (meters).
+##Optional: polygons + perimeter/shape
   patch_polys <- NULL
   perim_df <- NULL
 
@@ -157,8 +156,8 @@ patch_metrics <- function(disturbance,
     patch_polys <- terra::as.polygons(patch_id, dissolve = TRUE, na.rm = TRUE)
     names(patch_polys) <- "patch_id"
 
-    # Try perimeter via terra::perim (SpatVector)
-    # If terra::perim is not available in the user's version, we just skip perimeter.
+    # Perimeter via terra::perim (SpatVector)
+    # If terra::perim is not available in the user version, skip perimeter
     perim_ok <- "perim" %in% getNamespaceExports("terra")
 
     if (perim_ok) {
@@ -168,14 +167,10 @@ patch_metrics <- function(disturbance,
         perimeter_m = as.numeric(p_m)
       )
 
-      # Simple shape index (one common variant):
-      # shape_index = perimeter / (2 * sqrt(pi * area))
-      # = 1 for perfect circle, >1 for more complex/elongated shapes
-      # (requires perimeter + area)
     }
   }
 
-  ## --- Assemble patch table -------------------------------------------------
+##Assemble patch table
 
   patch_table <- merge(count_df, area_df, by = "patch_id", all = TRUE)
 
@@ -194,7 +189,7 @@ patch_metrics <- function(disturbance,
   patch_table <- patch_table[order(patch_table$area_m2, decreasing = TRUE), , drop = FALSE]
   rownames(patch_table) <- NULL
 
-  ## --- Return ---------------------------------------------------------------
+##Return
 
   list(
     patch_id = patch_id,
