@@ -376,6 +376,7 @@ By prioritizing large patches, it facilitates the identification of major distur
 
 ### Generates files
 
+The workflow automatically exports the following outputs to the specified directory:
 - disturbance presence map
 - patch ID map
 - severity map
