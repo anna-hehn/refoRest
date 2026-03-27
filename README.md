@@ -54,7 +54,7 @@ if (length(missing_packages) > 0) {
 remotes::install_github("anna-hehn/refoRest")
 ```
 
-## EXAMPLE: Detecting Forest Disturbances within a time series
+## EXAMPLE: Detecting Forest Disturbances within a Time Series
 
 ```r
 library(refoRest)
