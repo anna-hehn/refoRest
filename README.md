@@ -325,7 +325,7 @@ with `map_disturbance()` and exports results including maps, patch metrics and a
 By unifying all processing steps, it ensures methodological consisteny across detection, spatial aggregation
 and visualization, while reducing user complexity and enabling efficient reporting.
 
-### Argments
+### Arguments
 
 | Argument | Description |
 |----------|-------------|
@@ -347,6 +347,29 @@ and visualization, while reducing user complexity and enabling efficient reporti
 | save_maps | Saves maps as image files if TRUE. |
 | save_patch_table | Saves patch metrics as CSV if TRUE. |
 | save_report | Saves a text-based report if TRUE. |
+
+### Example Maps
+The following maps represent the outputs of the full disturbance analysis workflow and illustrate different aspects of the detected disturbance patterns.
+
+#### 1) Detected Disturbance
+This map shows the spatial distribution of pixel classified as disturbed based on deviations from baseline conditions.
+It represents the binary outcome of the disturbance detection step and provides a clear overview of where disturbances occurred within the study area.
+![Detected disturbance](man/figures/detected_disturbance.png)
+
+#### 2) Disturbace Severity (Z-Score)
+This map visualizes the intensity of disturbances using z-scores, indicating how strongly each pixel deviates from baseline conditions.
+more extreme values highlight areas of pronounced disturbance and allow differentiation between weak and strong disturbance signals.
+![Disturbance severity](man/figures/disturbance_severity.png)
+
+#### 3) Disturbance Patches (IDs)
+This map groups disturbed pixels into spatially connected patches, assigning a unique identification to each patch.
+It enables the transition from pixel-based detection to spatial analysis of disturbance structure and extent.
+![Disturbance patches](man/figures/disturbance_patches.png)
+
+#### 4) Largest Disturbance Pazches (Top 3)
+This map highlights the lagest disturbance patches, focusing on the most spatially dominant disturbance events.
+By prioritizing large patches, it facilitates the identification of major disturbance processes at the landscape scale.
+![Top disturbance patches](man/figures/disturbance_top_patches.png)
 
 ### Output
 
