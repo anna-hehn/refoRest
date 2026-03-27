@@ -32,10 +32,6 @@ This package requires the following R packages:
 - `scales`
 - `utils`
 
-
-## Limitations
-?
-
 ---
 
 ## Installation
