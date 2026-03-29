@@ -367,7 +367,7 @@ This map groups disturbed pixels into spatially connected patches, assigning a u
 It enables the transition from pixel-based detection to spatial analysis of disturbance structure and extent.
 ![Disturbance patches](man/figures/disturbance_patches.png)
 
-#### **4) Largest Disturbance Patches (Top 3)**
+#### **4) Top Disturbance Patches (Top 3)**
 This map highlights the largest disturbance patches, focusing on the most spatially dominant disturbance events.
 By prioritizing large patches, it facilitates the identification of major disturbance processes at the landscape scale.
 ![Top disturbance patches](man/figures/disturbance_top_patches.png)
