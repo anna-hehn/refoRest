@@ -264,9 +264,8 @@ disturbances, which are relevant for ecological interpretation and management de
 ```r
 p <- map_disturbance(
   patch_id = pm$patch_id,
+  severity = dz$severity,
   aoi = ex$aoi,
-  top_n = 3,
-  show = "patch_id",
   title = "Disturbance severity"
 )
 
