@@ -1,7 +1,7 @@
 # refoRest
 
 refoRest provides tools to detect, analyze and map disturbance patterns in remote sensing index time series.
-The package implements a reproducible workflow for disturbance detection using z-scores, spatial patch delination and automated generation of maps and summary outputs.
+The package implements a reproducible workflow for disturbance detection using z-scores, spatial patch delineation and automated generation of maps and summary outputs.
 
 ---
 
@@ -122,7 +122,7 @@ x <- get_index_local(
 )
 ```
 This function reads a time series of raster files and clips them to a given AOI.
-The Processing involves reading the rasters into a multi-layer `SpatRaster`, converting the AOI to a `terra` vector,
+The processing involves reading the rasters into a multi-layer `SpatRaster`, converting the AOI to a `terra` vector,
 cropping and masking the data to the AOI and assigning layer names based on the provided dates.
 
 ### Arguments
@@ -140,7 +140,7 @@ cropping and masking the data to the AOI and assigning layer names based on the 
 - Assigns layer names based on the provided dates
   
 ### Output
-- A `terra::SpatRaster`with one layer per date
+- A `terra::SpatRaster` with one layer per date
 
 ### `detect_disturbance_z()`
 ```r
@@ -176,7 +176,7 @@ dz <- detect_disturbance_z(
 ```
 This function detects disturbances from a raster time series using z-scores relative to a baseline period, which describes the core step of the workflow.
 
-**Interpretation**
+**Interpretation**:
 Disturbance is defined as a statistically significant deviation from a baseline period.
 Negative z-scores indicate a decrease in the index (e.g. vegetation loss), while positive values indicate an increase.
 The chosen threshold directly controls the sensitivity of the detection.
@@ -275,8 +275,8 @@ This function generates spatial visualizations of disturbance patterns using `gg
 It includes transforming raster data into a plot-compatible format, supporting multiple visualization modes, 
 enabling AOI overlays and providing flexible styling and export options.
 However, the function focuses on translating analytical outputs into spatially explicit representations that facilitate intuitive assessment 
-of disturbance patterns, where different map types emphazise complementary aspects such as presence, spatial configuration and intensity. By priotizing 
-larger patches the identification of dominant disturbance processess at the landscape scale is facilitated.
+of disturbance patterns, where different map types emphasize complementary aspects such as presence, spatial configuration and intensity. By prioritizing 
+larger patches the identification of dominant disturbance processes at the landscape scale is facilitated.
 
 ### Arguments
 
@@ -316,9 +316,9 @@ res <- create_map_and_report(
 )
 ```
 This function integrates the full disturbance analysis into a single reproducible pipeline.
-It detects disturbances using `detect_disturbance_z, delineates spatial patches via `patch_metrics`, generates map outputs
+It detects disturbances using `detect_disturbance_z`, delineates spatial patches via `patch_metrics`, generates map outputs
 with `map_disturbance()` and exports results including maps, patch metrics and a summary report.
-By unifying all processing steps, it ensures methodological consisteny across detection, spatial aggregation
+By unifying all processing steps, it ensures methodological consistency across detection, spatial aggregation
 and visualization, while reducing user complexity and enabling efficient reporting.
 
 ### Arguments
@@ -348,13 +348,13 @@ and visualization, while reducing user complexity and enabling efficient reporti
 The following maps represent the outputs of the full disturbance analysis workflow and illustrate different aspects of the detected disturbance patterns.
 
 #### 1) Detected Disturbance
-This map shows the spatial distribution of pixel classified as disturbed based on deviations from baseline conditions.
+This map shows the spatial distribution of pixels classified as disturbed based on deviations from baseline conditions.
 It represents the binary outcome of the disturbance detection step and provides a clear overview of where disturbances occurred within the study area.
 ![Detected disturbance](man/figures/detected_disturbance.png)
 
-#### 2) Disturbace Severity (Z-Score)
+#### 2) Disturbance Severity (Z-Score)
 This map visualizes the intensity of disturbances using z-scores, indicating how strongly each pixel deviates from baseline conditions.
-more extreme values highlight areas of pronounced disturbance and allow differentiation between weak and strong disturbance signals.
+More extreme values highlight areas of pronounced disturbance and allow differentiation between weak and strong disturbance signals.
 ![Disturbance severity](man/figures/disturbance_severity.png)
 
 #### 3) Disturbance Patches (IDs)
@@ -362,8 +362,8 @@ This map groups disturbed pixels into spatially connected patches, assigning a u
 It enables the transition from pixel-based detection to spatial analysis of disturbance structure and extent.
 ![Disturbance patches](man/figures/disturbance_patches.png)
 
-#### 4) Largest Disturbance Pazches (Top 3)
-This map highlights the lagest disturbance patches, focusing on the most spatially dominant disturbance events.
+#### 4) Largest Disturbance Patches (Top 3)
+This map highlights the largest disturbance patches, focusing on the most spatially dominant disturbance events.
 By prioritizing large patches, it facilitates the identification of major disturbance processes at the landscape scale.
 ![Top disturbance patches](man/figures/disturbance_top_patches.png)
 
