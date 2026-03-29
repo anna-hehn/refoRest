@@ -113,6 +113,7 @@ This function loads the synthetic example dataset included in the package.
 - `files`: character vector of NDVI raster file paths
 - `dates`: `Date` vector corresponding to the raster layers
 
+
 ### `get_index_local()`
 ```r
 x <- get_index_local(
@@ -141,6 +142,7 @@ cropping and masking the data to the AOI and assigning layer names based on the 
   
 ### Output
 - A `terra::SpatRaster` with one layer per date
+
 
 ### `detect_disturbance_z()`
 ```r
@@ -204,8 +206,9 @@ The chosen threshold directly controls the sensitivity of the detection.
 - `severity`: most extreme z-score in the post-baseline period
 - `summary`: method and result overview
 
-  Using the provided example dataset, the disturbance detection identified that approximately 60% of the pixels were classified as disturbed.  
-  This indicates a spatially extensive disturbance event affecting a large proportion of the study area.
+Using the provided example dataset, the disturbance detection identified that approximately 60% of the pixels were classified as disturbed.  
+This indicates a spatially extensive disturbance event affecting a large proportion of the study area.
+
 
 ### `patch_metrics()`
 ```r
@@ -259,6 +262,7 @@ disturbances, which are relevant for ecological interpretation and management de
 - first detection index
 - perimeter and shape index
 
+
 ### `map_disturbance()`
 
 ```r
@@ -297,6 +301,7 @@ By providing the `severity` raster, the function generates a map in which distur
 
 The resulting map highlights where disturbances are strongest within the study area.  
 It demonstrates how `map_disturbance()` translates analytical outputs into spatially explicit visualizations, enabling an intuitive interpretation of disturbance intensity patterns.
+
 
 ### `create_map_and_report`
 
@@ -347,22 +352,22 @@ and visualization, while reducing user complexity and enabling efficient reporti
 ### Example Maps
 The following maps represent the outputs of the full disturbance analysis workflow and illustrate different aspects of the detected disturbance patterns.
 
-#### 1) Detected Disturbance
+#### **1) Detected Disturbance**
 This map shows the spatial distribution of pixels classified as disturbed based on deviations from baseline conditions.
 It represents the binary outcome of the disturbance detection step and provides a clear overview of where disturbances occurred within the study area.
 ![Detected disturbance](man/figures/detected_disturbance.png)
 
-#### 2) Disturbance Severity (Z-Score)
+#### **2) Disturbance Severity (Z-Score)**
 This map visualizes the intensity of disturbances using z-scores, indicating how strongly each pixel deviates from baseline conditions.
 More extreme values highlight areas of pronounced disturbance and allow differentiation between weak and strong disturbance signals.
 ![Disturbance severity](man/figures/disturbance_severity.png)
 
-#### 3) Disturbance Patches (IDs)
+#### **3) Disturbance Patches (IDs)**
 This map groups disturbed pixels into spatially connected patches, assigning a unique identification to each patch.
 It enables the transition from pixel-based detection to spatial analysis of disturbance structure and extent.
 ![Disturbance patches](man/figures/disturbance_patches.png)
 
-#### 4) Largest Disturbance Patches (Top 3)
+#### **4) Largest Disturbance Patches (Top 3)**
 This map highlights the largest disturbance patches, focusing on the most spatially dominant disturbance events.
 By prioritizing large patches, it facilitates the identification of major disturbance processes at the landscape scale.
 ![Top disturbance patches](man/figures/disturbance_top_patches.png)
