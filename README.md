@@ -264,12 +264,11 @@ disturbances, which are relevant for ecological interpretation and management de
 ```r
 p <- map_disturbance(
   patch_id = pm$patch_id,
-  severity = dz$severity,
   aoi = ex$aoi,
+  top_n = 3,
+  show = "patch_id",
   title = "Disturbance severity"
 )
-
-p
 ```
 This function generates spatial visualizations of disturbance patterns using `ggplot2`. 
 It includes transforming raster data into a plot-compatible format, supporting multiple visualization modes, 
