@@ -269,6 +269,8 @@ p <- map_disturbance(
   show = "patch_id",
   title = "Disturbance severity"
 )
+
+p
 ```
 This function generates spatial visualizations of disturbance patterns using `ggplot2`. 
 It includes transforming raster data into a plot-compatible format, supporting multiple visualization modes, 
