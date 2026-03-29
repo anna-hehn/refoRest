@@ -1,4 +1,4 @@
-# refoRest <img src="man/figures/refoRest.png" align="right" height="139" />
+# refoRest <img src="man/figures/refoRest.png" align="right" height="200" />
 
 refoRest provides tools to detect, analyze and map disturbance patterns in remote sensing index time series.
 The package implements a reproducible workflow for disturbance detection using z-scores, spatial patch delineation and automated generation of maps and summary outputs.
