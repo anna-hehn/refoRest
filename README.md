@@ -39,9 +39,10 @@ At its center, a weathered men´s business shoe on a man-made surface acts as a 
 This focal point is emphasized by a radiant yellow glow, mirroring the package’s technical ability to isolate and highlight disturbance patches within complex remote sensing time series.
 
 While the imagery captures a direct human footprint, it invites a broader reflection on the shifting state of our forests, 
-where the lines between direct intervention and climate-induced extreme events are increasingly blurred. 
-By placing the vibrant vegetation in the background, the composition functions as a conceptual installation designed to provoke modern critical thinking about our role in the ecosystem. 
+where the lines between direct intervention and climate-induced extreme events are increasingly blurred.
+By placing the vibrant vegetation in the background, the composition functions as a conceptual installation designed to provoke modern critical thinking about our role in the ecosystem.
 It is a sober look at the friction between the footprints we leave and the environments we aim to monitor, analyze, and ultimately understand.
+
 ---
 
 ## Installation
