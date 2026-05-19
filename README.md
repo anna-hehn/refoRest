@@ -50,7 +50,7 @@ From GitHub
 
 ```r
 # List of required packages
-packages <- c("sf", "terra", "ggplot2", "scales", "utils")
+packages <- c("sf", "terra", "ggplot2", "scales", "utils", "remotes")
 
 # Check which packages are missing
 missing_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
